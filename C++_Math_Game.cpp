@@ -1,6 +1,8 @@
 // بسم الله
 #include <iostream>
 #include <cstdlib>
+#include <limits>
+#include <string>
 using namespace std;
 
 // =================== [ part 1 ] ===================
@@ -41,15 +43,41 @@ struct stFinalResults // The results after finishing the game (all rounds).
 
 short questions_num()
 {
-    short count = 0;
+    float count = 0.0f; // To consider the user input as a single input if they entered a num like (2.2)
     do
     {
         cout << "\nHow many questions do you want to answer [1:10]? : ";
         cin >> count;
-    } while (count < 1 || count > 10);
+        while (cin.fail())
+        {
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            cout << "\nInvalid Input! Please enter only numbers: ";
+            cin >> count;
+        }
+    } while (count < 1.0f || count > 10.0f);
 
     return count;
 }
+
+/* float questions_num()
+{
+    float count = 0.0f;
+    do
+    {
+        cout << "\nHow many questions do you want to answer [1:10]? : ";
+        cin >> count;
+        while (cin.fail())
+        {
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            cout << "\nInvalid Input! Please enter only numbers: ";
+            cin >> count;
+        }
+    } while (count < 1.0f || count > 10.0f);
+
+    return count;
+} */
 
 enQuestionLevel question_level()
 {
@@ -58,6 +86,13 @@ enQuestionLevel question_level()
     {
         cout << "Enter your question level ==> [1]:Easy, [2]:Med, [3]:Hard, [4]:Mix ? ";
         cin >> level;
+        while (cin.fail())
+        {
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            cout << "\nInvalid Input! Please enter only numbers: ";
+            cin >> level;
+        }
     } while (level < 1 || level > 4);
     return (enQuestionLevel)level;
 }
@@ -69,6 +104,13 @@ enOperationType operation_type()
     {
         cout << "Enter an operation type ==> [1]:Add, [2]:Sub, [3]:Mul, [4]:Div, [5]:Mix ? ";
         cin >> type;
+        while (cin.fail())
+        {
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            cout << "\nInvalid Input! Please enter only numbers: ";
+            cin >> type;
+        }
     } while (type < 1 || type > 5);
     return (enOperationType)type;
 }
@@ -249,6 +291,13 @@ stFinalResults play_the_game()
         cout << "\n\nQuestion [" << i + 1 << "/" << question_count << "]\n\n";
         myType = print_and_get_each_question(num1, num2, Level, OperationType);
         cin >> result;
+        while (cin.fail())
+        {
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            cout << "#### Invalid Input! Please enter only numbers #### : ";
+            cin >> result;
+        }
         correct_result = get_math_result(num1, num2, myType);
         if (result == correct_result)
         {
@@ -288,7 +337,7 @@ void start_the_game()
     {
         reset_terminal_screen();
         stFinalResults FinalResults = play_the_game(); // to get the fill_final_results() func. the 2 have the same data type.
-        print_final_results(FinalResults); // the FinalResults has been full with final game results, because of fill_final_results() func, which is as a return of the play_the_game func.
+        print_final_results(FinalResults);             // the FinalResults has been full with final game results, because of fill_final_results() func, which is as a return of the play_the_game func.
         cout << tabs(6) << "Do you want to play again? [Y/N] : ";
         cin >> play_again;
     } while (play_again == 'Y' || play_again == 'y');
